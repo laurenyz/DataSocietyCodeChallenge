@@ -32,8 +32,9 @@ function getTemperatures(url){  //gets forecast data for several days
     fetch(url)
     .then(resp => resp.json())
     .then(forecastData => {
-        let wednesdayObj = forecastData.properties.periods.filter(tempObj => tempObj.name==="Wednesday")[0] //pulls out weather for upcoming Wednesday
-        addTempToFile(wednesdayObj.temperature.toString())
+        console.log(forecastData.properties.periods)
+        let wednesdayNightObj = forecastData.properties.periods.filter(tempObj => tempObj.name==="Wednesday Night")[0] //pulls out weather for Wednesday Night
+        addTempToFile(wednesdayNightObj.temperature.toString())
     })
 }
 

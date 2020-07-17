@@ -14,7 +14,7 @@ fsLibrary.readFile('locations.txt', (error, txt) => {
         
         return [lat,long]
     })
-    console.log("newLoations", newLocations)
+
     getForcastURL(newLocations) //locations array
 })
 
@@ -23,7 +23,7 @@ function getForcastURL(locationsArray){  //gets another URL for forecast
         fetch(`https://api.weather.gov/points/${location[0]},${location[1]}`)
         .then(resp => resp.json())
         .then(jsonObj => {
-            getTemperatures(jsonObj.properties.forecast) 
+            getTemperatures(jsonObj.properties.forecast) //passes to function that makes another fetch call
         })
     })
 }
@@ -33,24 +33,13 @@ function getTemperatures(url){  //gets forecast data for several days
     .then(resp => resp.json())
     .then(forecastData => {
         let wednesdayObj = forecastData.properties.periods.filter(tempObj => tempObj.name==="Wednesday")[0] //pulls out weather for upcoming Wednesday
-        console.log(wednesdayObj)
         addTempToFile(wednesdayObj.temperature.toString())
     })
 }
 
 function addTempToFile(temp){
-
-//  let fileTemps
-//  fsLibrary.readFile('temperatures.txt', (error, txt)=>{
-//         if(error){throw err}
-//         fileTemps = txt.toString() //see if file already has temperatures
-//         fileTemps.length === 0? fileTemps = temp : fileTemps += `\n ${temp}`
-//         console.log("fileTemps", fileTemps)
-//         writeToFile(fileTemps)
-//     })
     fsLibrary.appendFile('temperatures.txt', `${temp}\n`, (error) => {   
         if (error) throw error
         console.log("Updated! New temp:", temp) 
      })
-
 }
